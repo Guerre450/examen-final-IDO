@@ -28,16 +28,29 @@ def reception_msg(cl,userdata,msg):
     message_content = msg.payload.decode()
     print("Recu", message_content)
     print(msg.topic)
-    if msg.topic[-1] == "T":
-        mqtt_temparatures[msg.topic] = message_content
-        print(mqtt_temparatures)
-    if msg.topic[-1] == "H":
-        mqtt_humidities[msg.topic] = message_content
-        print(mqtt_humidities)
-def temparature_max_topic():
-    pass
-def humidity_max_topic():
-    pass
+    if message_content.isnumeric():
+        if msg.topic[-1] == "T":
+            mqtt_temparatures[msg.topic] = message_content
+            print(mqtt_temparatures)
+        if msg.topic[-1] == "H":
+            mqtt_humidities[msg.topic] = message_content
+            print(mqtt_humidities)
+
+
+def temparature_max_topic() -> str:
+    maxtopic = None
+    for i in mqtt_temparatures:
+        if not maxtopic or mqtt_temparatures[i] > mqtt_temparatures[maxtopic]:
+            maxtopic = i
+    return maxtopic
+def humidity_max_topic() -> str:
+    maxtopic = None
+    for i in mqtt_humidities:
+        if not maxtopic or mqtt_humidities[i] > mqtt_humidities[maxtopic]:
+            maxtopic = i
+    return maxtopic
+
+
 
 def send_sensor_data():
     pass

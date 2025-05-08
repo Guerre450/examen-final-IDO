@@ -4,8 +4,8 @@ Hote :  HOTE par le « hostname » de votre RaspberryPi.
 T : (int) : Nombre entier correspondant à la dernière température lue
 H :  (int) : Nombre entier de 0 à 100 correspondant à la dernière valeur d’humidité lue
 etat (int) : 0 désactive l’envoi de données, 1 active l’envoi de données.
-# MQTT, Envoie, Fonction
 
+# MQTT, Envoie, Fonction
 ## condition, si **etat** == VRAI
 1. Température, envoyé à final/HOTE/T
 2. Humidité, envoyé à final/HOTE/H
