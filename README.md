@@ -14,8 +14,8 @@ etat (int) : 0 désactive l’envoi de données, 1 active l’envoi de données.
 
 
 # MQTT, Recoie, Fonction
-4. Lire, température, envoyé à final/#/T -> si (soi) plus grande -> Led Rouge = 1 sinon 0
-5. Lire Humidité, envoyé à final/#/H -> si (soi) plus grande -> Led bleu = 1 sinon 0
+4. Lire, température, envoyé à final/#/T -> si (soi) plus grande -> Led Rouge = 1 sinon 0 50%
+5. Lire Humidité, envoyé à final/#/H -> si (soi) plus grande -> Led bleu = 1 sinon 0 50 %
 
 
 # Event, Appel -> MQTT, Envoie, Fonction
