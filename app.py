@@ -4,14 +4,17 @@ import paho.mqtt.client as pmc
 import paho.mqtt.subscribe as subscribe
 import time
 from countdown import Timer 
+from button import Button
+from sensor import TempSensor
+import pigpio
 isRunning = True
 
 
 
 
 HOTE = "rapper"
-#BROKER = "mqttbroker.lan"
-BROKER = "192.168.137.1"
+#BROKER = ""
+BROKER = "mqttbroker.lan"
 PORT = 1883
 TOPIC_SEND_T = "final/%s/T" % HOTE
 TOPIC_SEND_H = "final/%s/H" % HOTE
@@ -61,12 +64,15 @@ def humidity_max_topic() -> str:
 
 
 def send_sensor_data():
-    pass
-
-def read_temperature_data()->int:
-    pass
-def read_humidity_data()->int:
-    pass
+    global client
+    global tempSensor
+    global etat
+    if etat:
+        last_result = tempSensor.result
+        client.publish(TOPIC_SEND_T,last_result["temp_c"])
+        client.publish(TOPIC_SEND_H,last_result["humidity"])
+    else:
+        print("Cannot send data, state is close!")
 
 
 # starting source :https://stackoverflow.com/questions/31264826/start-a-flask-application-in-separate-thread
@@ -105,10 +111,11 @@ def donnees():
 
 
 if __name__ == "__main__":
-    
+    pi = pigpio.pi()
+    button = Button(26,pi=pi)
     #threads objects
+    tempSensor = TempSensor()
     timer = Timer()
-
     #flask
     flask_thread = threading.Thread(target=lambda: app.run(host=host_name, port=port, debug=True, use_reloader=False))
     flask_thread.start()
@@ -121,10 +128,10 @@ if __name__ == "__main__":
     #source : https://pypi.org/project/paho-mqtt/#callbacks
     client.subscribe(TOPIC_RECEIVE_T)
     client.subscribe(TOPIC_HUMIDITY_RECEIVE_H)
-    # client.publish(TOPIC,"allo")
+    # 
 
 
-    threads = [timer]
+    threads = [timer, tempSensor]
     for i in threads: #starts the threads
         i.start()
     print("threads started")
@@ -134,7 +141,16 @@ if __name__ == "__main__":
     try :
         while isRunning and flask_thread.is_alive():
             if timer.get_state() == "timeout":
-                pass
+                send_sensor_data()
+                timer.update_time()
+            button_result = button.isReleased()
+            if button_result != -1.0:
+                if button_result < 2.0:
+                    send_sensor_data()
+                elif button_result >= 2.0:
+                    etat = not etat
+                    print("closed data" if etat == False else "opened data")
+            button.detectPress()
     except KeyboardInterrupt:
         pass
     client.loop_stop()
