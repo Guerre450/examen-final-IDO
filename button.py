@@ -16,11 +16,11 @@ class Button:
         if self.pi.read(self.pin) == 0:
             if not self.isPressed:
                 self.count += 1
-                if self.count >= 4:
+                if self.count >= 4: # waits for for consecutive 0 reads
                     self.is_button_just_released = False
                     self.isPressed = True
                     self.press_time = time.time()
-        else:
+        else: # == 1
             if self.isPressed:
                 self.released_time = time.time()
                 self.is_button_just_released = True
@@ -28,7 +28,7 @@ class Button:
             self.isPressed = False
     def getState(self):
         return self.isPressed
-    def isReleased(self) -> float:
+    def isReleased(self) -> float: # eats up the release and return the time if button just released
         if self.is_button_just_released:
             self.is_button_just_released = False
             return self.released_time - self.press_time

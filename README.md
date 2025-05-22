@@ -1,37 +1,33 @@
+# Start the program
+python3 app.py
 
-# Variables/Legend
-Hote :  HOTE par le « hostname » de votre RaspberryPi.
-T : (int) : Nombre entier correspondant à la dernière température lue
-H :  (int) : Nombre entier de 0 à 100 correspondant à la dernière valeur d’humidité lue
-etat (int) : 0 désactive l’envoi de données, 1 active l’envoi de données.
-
-# MQTT, Envoie, Fonction
-## condition, si **etat** == VRAI
-1. Température, envoyé à final/HOTE/T
-2. Humidité, envoyé à final/HOTE/H
+# Close the program
+ctrl-c
+wait for "program end" message
+ctr-c again to end flask
 
 
 
 
-# MQTT, Recoie, Fonction
-4. Lire, température, envoyé à final/#/T -> si (soi) plus grande -> Led Rouge = 1 sinon 0 50%
-5. Lire Humidité, envoyé à final/#/H -> si (soi) plus grande -> Led bleu = 1 sinon 0 50 %
+# Behaviors
 
+# sending data events
+sends data every 30 seconds
+sends data when button is pressed quickly
 
-# Event, Appel -> MQTT, Envoie, Fonction
-1. chaque 30 sec
-2. Appui, sec < 2 sec since relache
+# close / open data sends
+press button for 2-3 seconds to close/open data sending
+send http post request to close/open data sending
 
+# leds:
 
-# EVENT, CHANGE, VARIABLE **ENVOI** = ! **ENVOI**
-1. Appui, sec > 2 sec since relache
+red led opens when pi's temperature is max on the network
+blue led opens when pi's humidity is max on the network
+white led opens when data sending is opened.
 
-# EVENT, CHANGE, VARIABLE **ENVOI** == VALUE
-1. Flask, etat = result 
-DONE
-# EVENT, GET, FLASK, TEMPERATURE ET HUMIDITÉ
-1. 
-T (int) : Nombre entier correspondant à la dernière température lue
- H (int) : Nombre entier de 0 à 100 correspondant à la dernière valeur d’humidité lue
+# Odd behaviors:
+
+sensor might print alot of timeout, this is normal.
+
 
 

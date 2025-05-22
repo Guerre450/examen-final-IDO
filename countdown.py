@@ -1,7 +1,7 @@
 import pigpio
 import threading
 import time
-class Timer(threading.Thread):
+class Timer(threading.Thread): # turns it's state to timeout when the designated time is reached.
     def __init__(self, group = None, target = None, name = None, args = ..., kwargs = None, *, daemon = None):
         super().__init__(group, target, name, args, kwargs, daemon=daemon)
         self.state = "running"
@@ -9,7 +9,6 @@ class Timer(threading.Thread):
         self.kill = False
         self.timeout_value = 30
     def run(self):
-        #Matrix Animation
         while not self.kill:
             if time.time() - self.last_time > self.timeout_value:
                 self.state = "timeout" 
